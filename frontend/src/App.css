@@ -1,8 +1,26 @@
+body {
+  background: #f5ecd7 !important;
+  color: #222 !important;
+}
 #root {
+  background: #f5ecd7;
+  color: #222;
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+}
+
+/* Buttons und Inputs anpassen */
+button, input, select, textarea {
+  background: #fff8e1;
+  color: #222;
+  border: 1px solid #bfa76a;
+  border-radius: 4px;
+  padding: 0.5em 1em;
+}
+button:hover {
+  background: #f0e0b6;
 }
 
 .logo {
@@ -39,4 +57,9 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* Karten-Container */
+.PlantMapContainer {
+  background: #f5ecd7;
 }

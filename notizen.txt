@@ -1,6 +1,7 @@
 Server starten & neustarten:
 cd backend && uvicorn main:app --reload --port 9000
 
+------------- Grundrequest
 Assistiere mich bei der Erstellung des Projektes. Ich will ein Online-Tool mit dem man online eine 2D-Karte hat, auf der man Permakultur-Designs interaktiv erstellen und bearbeiten kann. Überlege dir zuerst, wie du dieses Projekt aufbauen willst. der ordner bhp_builder ist der projektordner. vermeide es, sachen doppelt zu programmieren. Ich habe bereits eine pflanzendatenbank in arten.csv.
 Python ist installiert.
 

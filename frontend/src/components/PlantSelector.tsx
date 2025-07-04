@@ -3,6 +3,10 @@ import React from "react";
 export interface Plant {
   ID: string | number;
   "deutsche Bezeichnung": string;
+  Gattung?: string;
+  Familie?: string;
+  Art?: string;
+  "Höhe max [cm]"?: string | number;
 }
 
 interface PlantSelectorProps {
