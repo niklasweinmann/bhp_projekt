@@ -2,24 +2,24 @@ import { useEffect, useState } from 'react'
 import { Stage, Layer, Circle } from 'react-konva'
 import './App.css'
 import PlantMap from './components/PlantMap'
-
-interface Art {
-  [key: string]: string | number | null
-}
+import PlantSelector from './components/PlantSelector'
+import PlantInfo from './components/PlantInfo'
+import type { Plant } from './components/PlantSelector'
 
 function App() {
-  const [arten, setArten] = useState<Art[]>([])
+  const [arten, setArten] = useState<Plant[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null)
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/plants')
+    fetch('http://localhost:9000/api/plants')
       .then((res) => res.json())
       .then((data) => {
         setArten(data)
         setLoading(false)
       })
-      .catch((err) => {
+      .catch(() => {
         setError('Fehler beim Laden der Arten')
         setLoading(false)
       })
@@ -31,16 +31,12 @@ function App() {
       {loading && <p>Lade Pflanzenarten...</p>}
       {error && <p style={{color:'red'}}>{error}</p>}
       {!loading && !error && (
-        <div style={{marginBottom: 16}}>
-          <b>Arten aus Backend:</b>
-          <ul>
-            {arten.map((art, i) => (
-              <li key={i}>{art['deutsche Bezeichnung'] || JSON.stringify(art)}</li>
-            ))}
-          </ul>
-        </div>
+        <>
+          <PlantSelector plants={arten} onSelect={setSelectedPlant} />
+          <PlantInfo plant={selectedPlant} />
+          <PlantMap selectedPlant={selectedPlant} />
+        </>
       )}
-      <PlantMap />
     </div>
   )
 }
