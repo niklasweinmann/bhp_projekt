@@ -337,19 +337,42 @@ export const PlantMap: React.FC<PlantMapProps> = ({ selectedPlant }) => {
       <LayerToggle layers={layers} onToggle={toggleLayer} />
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8, flexWrap: 'wrap' }}>
         {/* Werkzeugauswahl ... */}
-        <label><input type="radio" checked={tool === 'pflanze'} onChange={() => setTool('pflanze')} />🌱 Pflanzen</label>
-        <label><input type="radio" checked={tool === 'freihand'} onChange={() => setTool('freihand')} />✏️ Freihand</label>
-        <label><input type="radio" checked={tool === 'text'} onChange={() => setTool('text')} />📝 Text</label>
-        <label><input type="radio" checked={tool === 'rechteck'} onChange={() => setTool('rechteck')} />▭ Rechteck</label>
-        <label><input type="radio" checked={tool === 'polygon'} onChange={() => setTool('polygon')} />🔺 Polygon</label>
+        <div className="tool-toggle-group">
+          <button
+            className={`tool-toggle-btn${tool === 'pflanze' ? ' selected' : ''}`}
+            onClick={() => setTool('pflanze')}
+            title="Pflanzen-Werkzeug"
+          >🌱 Pflanze</button>
+          <button
+            className={`tool-toggle-btn${tool === 'freihand' ? ' selected' : ''}`}
+            onClick={() => setTool('freihand')}
+            title="Freihand-Werkzeug"
+          >✏️ Freihand</button>
+          <button
+            className={`tool-toggle-btn${tool === 'text' ? ' selected' : ''}`}
+            onClick={() => setTool('text')}
+            title="Text-Werkzeug"
+          >📝 Text</button>
+          <button
+            className={`tool-toggle-btn${tool === 'rechteck' ? ' selected' : ''}`}
+            onClick={() => setTool('rechteck')}
+            title="Rechteck-Werkzeug"
+          >▭ Rechteck</button>
+          <button
+            className={`tool-toggle-btn${tool === 'polygon' ? ' selected' : ''}`}
+            onClick={() => setTool('polygon')}
+            title="Polygon-Werkzeug"
+          >🔺 Polygon</button>
+        </div>
         <button className="button-custom" onClick={finishPolygon} disabled={!drawingPoly}>Polygon fertig</button>
         <button className="button-custom" onClick={handleDeleteSelected} disabled={selectedObjects.length === 0}>Auswahl löschen</button>
         <button className="button-custom" onClick={handleExportPNG}>Export als PNG</button>
         <button className="button-custom" onClick={handleUndo} style={{ marginRight: 8 }}>Undo</button>
         <button className="button-custom" onClick={handleRedo} style={{ marginRight: 16 }}>Redo</button>
-        <label style={{ marginRight: 16 }}>
+        <label className="influence-switch">
           <input type="checkbox" checked={showCircles} onChange={e => setShowCircles(e.target.checked)} />
-          Einflussbereiche anzeigen
+          <span className="influence-slider" />
+          <span style={{ marginLeft: 6, fontSize: 13, color: '#bfa76a' }} title="Einflussbereiche der Pflanzen anzeigen">🟢 Einflussbereich</span>
         </label>
         {/* NEU: Color Picker für Pflanzenfarbe */}
         {tool === 'pflanze' && (
@@ -377,7 +400,7 @@ export const PlantMap: React.FC<PlantMapProps> = ({ selectedPlant }) => {
         <input value={designName} onChange={e => setDesignName(e.target.value)} style={{ width: 140, marginRight: 8 }} placeholder="Design-Name" />
         <button className="button-custom" onClick={handleServerSave} style={{ marginRight: 8 }} disabled={isGuest}>Server speichern</button>
         <button className="button-custom" onClick={refreshServerDesigns} style={{ marginRight: 8 }} disabled={isGuest}>Liste aktualisieren</button>
-        <select onChange={e => handleServerLoad(e.target.value)} style={{ marginRight: 8 }} disabled={isGuest}>
+        <select className="select-design" onChange={e => handleServerLoad(e.target.value)} style={{ marginRight: 8 }} disabled={isGuest}>
           <option value="">Design laden...</option>
           {serverDesigns.map(name => <option key={name} value={name}>{name}</option>)}
         </select>
@@ -420,9 +443,11 @@ export const PlantMap: React.FC<PlantMapProps> = ({ selectedPlant }) => {
                 {showCircles && (
                   <Circle
                     radius={pp.radius || 50}
-                    fill={selectedIdx === i ? "rgba(127,201,127,0.15)" : "rgba(127,201,127,0.08)"}
+                    fill={selectedIdx === i ? "rgba(127,201,127,0.13)" : "rgba(127,201,127,0.07)"}
                     stroke={pp.color || "#7fc97f"}
                     strokeWidth={2}
+                    dash={[4, 3]}
+                    className="konva-influence-circle"
                   />
                 )}
                 {showCircles && selectedIdx === i && (

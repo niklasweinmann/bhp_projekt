@@ -156,9 +156,9 @@ input, select {
   color: #bfa76a;
 }
 .button-edit {
-  background: #fffde7;
-  color: #bfa76a;
-  border: 1px solid #ffe082;
+  background: #fff;
+  color: #7fc97f;
+  border: 1.5px solid #7fc97f;
   border-radius: 7px;
   font-weight: 600;
   box-shadow: none;
@@ -167,9 +167,13 @@ input, select {
   transition: background 0.13s, border 0.13s, color 0.13s;
 }
 .button-edit.active, .button-edit:active {
-  background: #ffe600;
-  color: #fff;
-  border-color: #ffd600;
+  background: #eaffea;
+  color: #388e3c;
+  border-color: #7fc97f;
+}
+.button-edit:hover {
+  background: #eaffea;
+  color: #388e3c;
 }
 
 .select-custom {
@@ -185,6 +189,57 @@ input, select {
   min-height: 0;
 }
 .select-custom:focus, .select-custom:hover {
+  background: #ffe9b3;
+  border-color: #bfa76a;
+  outline: none;
+}
+
+.tool-toggle-group {
+  display: flex;
+  gap: 0.3em;
+  margin-bottom: 0.5em;
+}
+.tool-toggle-btn {
+  background: #fff;
+  color: #7fc97f;
+  border: 1.5px solid #7fc97f;
+  border-radius: 7px;
+  padding: 0.32em 0.95em;
+  font-size: 0.98rem;
+  font-weight: 600;
+  box-shadow: none;
+  cursor: pointer;
+  transition: background 0.13s, border 0.13s, color 0.13s;
+  outline: none;
+  min-width: 0;
+  min-height: 0;
+  line-height: 1.2;
+}
+.tool-toggle-btn.selected, .tool-toggle-btn:active {
+  background: #eaffea;
+  color: #388e3c;
+  border-color: #7fc97f;
+}
+.tool-toggle-btn:hover {
+  background: #eaffea;
+  color: #388e3c;
+}
+
+.select-design {
+  background: #fff8e1;
+  color: #232323;
+  border: 1.5px solid #e0c98c;
+  border-radius: 7px;
+  padding: 0.32em 0.95em;
+  font-size: 0.98rem;
+  font-weight: 600;
+  box-shadow: none;
+  margin-right: 0.2em;
+  min-width: 120px;
+  min-height: 0;
+  transition: background 0.13s, border 0.13s;
+}
+.select-design:focus, .select-design:hover {
   background: #ffe9b3;
   border-color: #bfa76a;
   outline: none;
@@ -255,6 +310,51 @@ input, select {
 .layer-switch input[type="checkbox"]::before {
   content: '';
   display: none;
+}
+
+.influence-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2em;
+  cursor: pointer;
+  margin-right: 0.7em;
+}
+.influence-switch input[type="checkbox"] {
+  appearance: none;
+  width: 1.5em;
+  height: 0.9em;
+  background: #fff;
+  border: 1.5px solid #7fc97f;
+  border-radius: 0.6em;
+  position: relative;
+  outline: none;
+  transition: background 0.13s, border 0.13s;
+  cursor: pointer;
+  margin: 0;
+}
+.influence-switch input[type="checkbox"]:checked {
+  background: #eaffea;
+}
+.influence-slider {
+  position: absolute;
+  left: 0.1em;
+  top: 0.1em;
+  width: 0.7em;
+  height: 0.7em;
+  background: #7fc97f;
+  border-radius: 50%;
+  transition: left 0.13s, background 0.13s;
+  pointer-events: none;
+}
+.influence-switch input[type="checkbox"]:checked + .influence-slider {
+  left: 0.7em;
+  background: #388e3c;
+}
+
+/* Einflussbereich-Kreis optisch klarer */
+.konva-influence-circle {
+  stroke-dasharray: 4 3;
+  pointer-events: none;
 }
 
 .plant-selector-card, .plant-info-card {
