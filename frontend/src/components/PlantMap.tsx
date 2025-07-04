@@ -18,6 +18,7 @@ export interface PlacedPlant {
   x: number;
   y: number;
   radius?: number; // Einflussbereich
+  color?: string; // NEU: individuelle Farbe
 }
 
 export const PlantMap: React.FC<PlantMapProps> = ({ selectedPlant }) => {
@@ -32,7 +33,7 @@ export const PlantMap: React.FC<PlantMapProps> = ({ selectedPlant }) => {
   ]);
   const [drawing, setDrawing] = useState(false);
   const [lines, setLines] = useState<{ points: number[]; color: string }[]>([]);
-  const [currentColor, setCurrentColor] = useState('#0074d9');
+  const [currentColor, setCurrentColor] = useState('#7fc97f'); // Standardfarbe für Pflanzen
   const [history, setHistory] = useState<any[]>([]);
   const [redoStack, setRedoStack] = useState<any[]>([]);
   const [textFields, setTextFields] = useState<{ x: number; y: number; text: string }[]>([]);
@@ -48,6 +49,7 @@ export const PlantMap: React.FC<PlantMapProps> = ({ selectedPlant }) => {
   const [selectedObjects, setSelectedObjects] = useState<{ type: string; idx: number }[]>([]);
   const [serverDesigns, setServerDesigns] = useState<string[]>([]);
   const [designName, setDesignName] = useState('mein-design');
+  const [editMode, setEditMode] = useState(false); // NEU: Bearbeitungsmodus
 
   // Helper für History
   const pushHistory = (newPlants: typeof placedPlants, newLines: typeof lines) => {
@@ -103,10 +105,10 @@ export const PlantMap: React.FC<PlantMapProps> = ({ selectedPlant }) => {
       let defaultRadius = 50;
       const hoehe = Number(selectedPlant["Höhe max [cm]"]);
       if (!isNaN(hoehe)) defaultRadius = Math.max(30, Math.min(hoehe, 200));
-      pushHistory([...placedPlants, { plant: selectedPlant, x: pointerPosition.x, y: pointerPosition.y, radius: defaultRadius }], lines);
+      pushHistory([...placedPlants, { plant: selectedPlant, x: pointerPosition.x, y: pointerPosition.y, radius: defaultRadius, color: currentColor }], lines);
       setPlacedPlants([
         ...placedPlants,
-        { plant: selectedPlant, x: pointerPosition.x, y: pointerPosition.y, radius: defaultRadius },
+        { plant: selectedPlant, x: pointerPosition.x, y: pointerPosition.y, radius: defaultRadius, color: currentColor },
       ]);
     }
   };
@@ -333,34 +335,48 @@ export const PlantMap: React.FC<PlantMapProps> = ({ selectedPlant }) => {
   return (
     <div>
       <LayerToggle layers={layers} onToggle={toggleLayer} />
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8, flexWrap: 'wrap' }}>
+        {/* Werkzeugauswahl ... */}
         <label><input type="radio" checked={tool === 'pflanze'} onChange={() => setTool('pflanze')} />🌱 Pflanzen</label>
         <label><input type="radio" checked={tool === 'freihand'} onChange={() => setTool('freihand')} />✏️ Freihand</label>
         <label><input type="radio" checked={tool === 'text'} onChange={() => setTool('text')} />📝 Text</label>
         <label><input type="radio" checked={tool === 'rechteck'} onChange={() => setTool('rechteck')} />▭ Rechteck</label>
         <label><input type="radio" checked={tool === 'polygon'} onChange={() => setTool('polygon')} />🔺 Polygon</label>
-        <button onClick={finishPolygon} disabled={!drawingPoly}>Polygon fertig</button>
-        <button onClick={handleDeleteSelected} disabled={selectedObjects.length === 0}>Auswahl löschen</button>
-        <button onClick={handleExportPNG}>Export als PNG</button>
-        <button onClick={handleUndo} style={{ marginRight: 8 }}>Undo</button>
-        <button onClick={handleRedo} style={{ marginRight: 16 }}>Redo</button>
+        <button className="button-custom" onClick={finishPolygon} disabled={!drawingPoly}>Polygon fertig</button>
+        <button className="button-custom" onClick={handleDeleteSelected} disabled={selectedObjects.length === 0}>Auswahl löschen</button>
+        <button className="button-custom" onClick={handleExportPNG}>Export als PNG</button>
+        <button className="button-custom" onClick={handleUndo} style={{ marginRight: 8 }}>Undo</button>
+        <button className="button-custom" onClick={handleRedo} style={{ marginRight: 16 }}>Redo</button>
         <label style={{ marginRight: 16 }}>
           <input type="checkbox" checked={showCircles} onChange={e => setShowCircles(e.target.checked)} />
           Einflussbereiche anzeigen
         </label>
-        <button onClick={handleSave} style={{ marginRight: 8 }}>Design speichern</button>
-        <button onClick={handleLoad} style={{ marginRight: 8 }}>Design laden</button>
-        <button onClick={handleExport} style={{ marginRight: 8 }}>Exportieren</button>
-        <label style={{ marginRight: 8 }}>
-          <input type="file" accept="application/json" style={{ display: 'none' }} onChange={handleImport} />
-          <span style={{ cursor: 'pointer', color: '#0074d9', textDecoration: 'underline' }}>Importieren</span>
-        </label>
-        <button onClick={handleReset}>Reset</button>
+        {/* NEU: Color Picker für Pflanzenfarbe */}
+        {tool === 'pflanze' && (
+          <label style={{ display: 'flex', alignItems: 'center', gap: 4, marginLeft: 12 }}>
+            <span style={{ fontSize: 15 }}>Farbe:</span>
+            <input
+              type="color"
+              value={currentColor}
+              onChange={e => setCurrentColor(e.target.value)}
+              style={{ width: 32, height: 32, border: 'none', background: 'none', cursor: 'pointer' }}
+              title="Farbe für neue Pflanze wählen"
+            />
+          </label>
+        )}
+        <button
+          className={`button-edit${editMode ? ' active' : ''}`}
+          onClick={() => setEditMode(m => !m)}
+          style={{ marginLeft: 8 }}
+          title="Bearbeitungsmodus umschalten"
+        >
+          ✏️ Bearbeiten
+        </button>
       </div>
       <div style={{ marginBottom: 8 }}>
         <input value={designName} onChange={e => setDesignName(e.target.value)} style={{ width: 140, marginRight: 8 }} placeholder="Design-Name" />
-        <button onClick={handleServerSave} style={{ marginRight: 8 }} disabled={isGuest}>Server speichern</button>
-        <button onClick={refreshServerDesigns} style={{ marginRight: 8 }} disabled={isGuest}>Liste aktualisieren</button>
+        <button className="button-custom" onClick={handleServerSave} style={{ marginRight: 8 }} disabled={isGuest}>Server speichern</button>
+        <button className="button-custom" onClick={refreshServerDesigns} style={{ marginRight: 8 }} disabled={isGuest}>Liste aktualisieren</button>
         <select onChange={e => handleServerLoad(e.target.value)} style={{ marginRight: 8 }} disabled={isGuest}>
           <option value="">Design laden...</option>
           {serverDesigns.map(name => <option key={name} value={name}>{name}</option>)}
@@ -405,7 +421,7 @@ export const PlantMap: React.FC<PlantMapProps> = ({ selectedPlant }) => {
                   <Circle
                     radius={pp.radius || 50}
                     fill={selectedIdx === i ? "rgba(127,201,127,0.15)" : "rgba(127,201,127,0.08)"}
-                    stroke="#7fc97f"
+                    stroke={pp.color || "#7fc97f"}
                     strokeWidth={2}
                   />
                 )}
@@ -424,7 +440,8 @@ export const PlantMap: React.FC<PlantMapProps> = ({ selectedPlant }) => {
                     style={{ cursor: 'ew-resize' }}
                   />
                 )}
-                <Circle radius={20} fill={selectedObjects.some(o => o.type === 'pflanze' && o.idx === i) ? "#fbb" : "#7fc97f"} stroke="#333" strokeWidth={2} />
+                {/* Pflanzenkreis mit individueller Farbe */}
+                <Circle radius={20} fill={pp.color || "#7fc97f"} stroke="#333" strokeWidth={2} />
                 <Text
                   text={pp.plant["deutsche Bezeichnung"]}
                   fontSize={12}

@@ -8,8 +8,8 @@ interface PlantInfoProps {
 export const PlantInfo: React.FC<PlantInfoProps> = ({ plant }) => {
   if (!plant) return null;
   return (
-    <div style={{ margin: '16px 0', padding: 12, background: '#f9f9f9', border: '1px solid #ccc', borderRadius: 6 }}>
-      <b>Pflanzen-Info:</b>
+    <div className="card plant-info-card" style={{ padding: 16, margin: '12px 0', background: '#fff8e1', border: '1.5px solid #e0c98c', borderRadius: 10 }}>
+      <b style={{ fontSize: '1.1em', color: '#bfa76a' }}>Pflanzen-Info</b>
       <div><b>Name:</b> {plant["deutsche Bezeichnung"]}</div>
       <div><b>ID:</b> {plant.ID}</div>
       {/* Hier können später weitere Infos ergänzt werden */}

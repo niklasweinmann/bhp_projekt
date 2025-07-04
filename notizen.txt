@@ -1,3 +1,8 @@
+mache alle buttons schick und in eigenem stil und nicht in systemstil. alles in einem einheitlichen design. füge einn bearbeitungsknopf ein, der gelb leuchtet wenn er angeklickt wird.
+das design, was vorher was, hat mir mehr gefallen. ändere vorallem auch die buttons die nicht gleich aussehenh. alles soll gleich aussehen.
+und die pflanzenauswahl und info, alles schick zusammen kompakt
+
+---------
 Server starten & neustarten:
 cd backend && uvicorn main:app --reload --port 9000
 

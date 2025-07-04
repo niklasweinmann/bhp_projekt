@@ -66,7 +66,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ onAuth }) => {
         />
       </div>
       {error && <div style={{ color: 'red', marginBottom: 12 }}>{error}</div>}
-      <button type="submit" disabled={loading} style={{ width: '100%', padding: 10, background: '#fff8e1', color: '#222', border: '1px solid #bfa76a' }}>
+      <button
+        className="button-custom"
+        type="submit"
+        disabled={loading}
+        style={{ width: '100%' }}
+      >
         {loading ? "Bitte warten..." : isRegister ? "Registrieren" : "Login"}
       </button>
       <div style={{ marginTop: 12, textAlign: 'center' }}>
@@ -75,7 +80,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ onAuth }) => {
         </a>
       </div>
       <div style={{ marginTop: 16, textAlign: 'center' }}>
-        <button type="button" style={{ background: '#f0e0b6', color: '#222', border: '1px solid #bfa76a', width: '100%' }} onClick={() => onAuth('guest', 'Gast')}>Als Gast fortfahren</button>
+        <button
+          className="button-custom"
+          type="button"
+          style={{ width: '100%' }}
+          onClick={() => onAuth('guest', 'Gast')}
+        >Als Gast fortfahren</button>
       </div>
     </form>
   );

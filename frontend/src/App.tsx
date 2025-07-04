@@ -47,7 +47,7 @@ function App() {
       <h1>Permakultur 2D-Editor (react-konva)</h1>
       {token && username && (
         <div style={{ position: 'absolute', top: 10, right: 20, background: '#fff8e1', color: '#222', border: '1px solid #bfa76a', borderRadius: 6, padding: '6px 16px' }}>
-          Eingeloggt als <b>{username}</b> <button onClick={handleLogout} style={{ marginLeft: 8 }}>Logout</button>
+          Eingeloggt als <b>{username}</b> <button className="button-custom" onClick={handleLogout} style={{ marginLeft: 8 }}>Logout</button>
         </div>
       )}
       {!token ? (

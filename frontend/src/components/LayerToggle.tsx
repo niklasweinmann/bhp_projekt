@@ -6,16 +6,16 @@ interface LayerToggleProps {
 }
 
 const LayerToggle: React.FC<LayerToggleProps> = ({ layers, onToggle }) => (
-  <div style={{ marginBottom: 8 }}>
-    <b>Layer:</b>
+  <div className="layer-toggle-bar">
+    <b style={{ marginRight: 8, color: '#bfa76a' }}>Layer:</b>
     {layers.map((layer, i) => (
-      <label key={layer.name} style={{ marginLeft: 12 }}>
+      <label key={layer.name} className="layer-switch">
         <input
           type="checkbox"
           checked={layer.visible}
           onChange={() => onToggle(i)}
         />
-        {layer.name}
+        <span>{layer.name}</span>
       </label>
     ))}
   </div>
