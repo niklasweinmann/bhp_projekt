@@ -1,0 +1,22 @@
+Server starten & neustarten:
+cd backend && uvicorn main:app --reload
+
+Assistiere mich bei der Erstellung des Projektes. Ich will ein Online-Tool mit dem man online eine 2D-Karte hat, auf der man Permakultur-Designs interaktiv erstellen und bearbeiten kann. Überlege dir zuerst, wie du dieses Projekt aufbauen willst. der ordner bhp_builder ist der projektordner. vermeide es, sachen doppelt zu programmieren. Ich habe bereits eine pflanzendatenbank in arten.csv.
+Python ist installiert.
+
+3. Features (MVP)
+
+Interaktive 2D-Karte (z.B. mit react-konva oder leaflet.js)
+Pflanzen aus Datenbank auswählen und auf Karte platzieren
+Pflanzen-Infos anzeigen
+Designs speichern/laden (zunächst lokal, später serverseitig)
+(Optional) Benutzerverwaltung
+4. Nächste Schritte
+
+Initialisiere das Backend (FastAPI) und Frontend (React)
+Implementiere API-Endpunkte für Pflanzen-Daten
+Baue das Grundgerüst der Web-App mit Karten-Komponente.
+
+Arbeite mit react-konva.
+
+Schaue dir erst den gesamten projektordner und -struktur an.
