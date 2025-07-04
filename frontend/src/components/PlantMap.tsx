@@ -318,7 +318,17 @@ export const PlantMap: React.FC<PlantMapProps> = ({ selectedPlant }) => {
     setServerDesigns(await listDesignsServer());
   };
 
-  React.useEffect(() => { refreshServerDesigns(); }, []);
+  // GASTMODUS-LOGIK
+  const isGuest = localStorage.getItem('auth_token') === 'guest';
+
+  // Server-Designs laden (nur wenn nicht Gast)
+  React.useEffect(() => {
+    if (!isGuest) {
+      refreshServerDesigns();
+    } else {
+      setServerDesigns([]);
+    }
+  }, [isGuest]);
 
   return (
     <div>
@@ -349,12 +359,13 @@ export const PlantMap: React.FC<PlantMapProps> = ({ selectedPlant }) => {
       </div>
       <div style={{ marginBottom: 8 }}>
         <input value={designName} onChange={e => setDesignName(e.target.value)} style={{ width: 140, marginRight: 8 }} placeholder="Design-Name" />
-        <button onClick={handleServerSave} style={{ marginRight: 8 }}>Server speichern</button>
-        <button onClick={refreshServerDesigns} style={{ marginRight: 8 }}>Liste aktualisieren</button>
-        <select onChange={e => handleServerLoad(e.target.value)} style={{ marginRight: 8 }}>
+        <button onClick={handleServerSave} style={{ marginRight: 8 }} disabled={isGuest}>Server speichern</button>
+        <button onClick={refreshServerDesigns} style={{ marginRight: 8 }} disabled={isGuest}>Liste aktualisieren</button>
+        <select onChange={e => handleServerLoad(e.target.value)} style={{ marginRight: 8 }} disabled={isGuest}>
           <option value="">Design laden...</option>
           {serverDesigns.map(name => <option key={name} value={name}>{name}</option>)}
         </select>
+        {isGuest && <span style={{ color: '#bfa76a', marginLeft: 8 }}><b>Nur lokale Speicherung als Gast!</b></span>}
       </div>
       <Stage
         id="editor-stage"
