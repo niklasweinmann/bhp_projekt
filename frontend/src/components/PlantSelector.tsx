@@ -7,6 +7,7 @@ export interface Plant {
   Familie?: string;
   Art?: string;
   "Höhe max [cm]"?: string | number;
+  "Lichtzahl (L)"?: string;
 }
 
 interface PlantSelectorProps {
