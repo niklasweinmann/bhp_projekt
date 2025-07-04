@@ -1,3 +1,13 @@
+html, body, #root {
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  min-width: 100vw;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
 body {
   background: #f8f6ef !important;
   color: #232323 !important;
@@ -6,10 +16,16 @@ body {
 #root {
   background: #f8f6ef;
   color: #232323;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2.5rem 2rem 2rem 2rem;
+  /* max-width: 1280px; entfernt, damit volle Breite genutzt wird */
+  margin: 0;
+  padding: 0;
   text-align: center;
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  min-width: 100vw;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Buttons und Inputs anpassen */

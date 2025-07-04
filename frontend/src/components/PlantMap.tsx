@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Stage, Layer, Text, Circle, Group, Rect, Line } from "react-konva";
 import type { Plant } from "./PlantSelector";
 import { saveDesign, loadDesign, saveDesignServer, loadDesignServer, listDesignsServer } from '../utils/designStorage';
@@ -6,8 +6,16 @@ import { saveAs } from 'file-saver';
 import LayerToggle from './LayerToggle';
 import { toPng } from 'html-to-image';
 
-const WIDTH = 800;
-const HEIGHT = 600;
+// Dynamische Breite und Höhe basierend auf Fenstergröße
+const useWindowSize = () => {
+  const [size, setSize] = useState({ width: window.innerWidth, height: window.innerHeight });
+  useEffect(() => {
+    const handleResize = () => setSize({ width: window.innerWidth, height: window.innerHeight });
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  return size;
+};
 
 interface PlantMapProps {
   selectedPlant: Plant | null;
@@ -22,6 +30,7 @@ export interface PlacedPlant {
 }
 
 export const PlantMap: React.FC<PlantMapProps> = ({ selectedPlant }) => {
+  const { width, height } = useWindowSize();
   const [placedPlants, setPlacedPlants] = useState<PlacedPlant[]>([]);
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   const [infoPos, setInfoPos] = useState<{x: number, y: number} | null>(null);
@@ -409,8 +418,8 @@ export const PlantMap: React.FC<PlantMapProps> = ({ selectedPlant }) => {
       <Stage
         id="editor-stage"
         ref={stageRef}
-        width={WIDTH}
-        height={HEIGHT}
+        width={width}
+        height={height}
         style={{ border: "1px solid #ccc" }}
         onClick={handleStageClick}
         onMouseDown={handleStageMouseDown}
@@ -420,11 +429,11 @@ export const PlantMap: React.FC<PlantMapProps> = ({ selectedPlant }) => {
         {/* Raster-Layer */}
         {layers[0].visible && (
           <Layer>
-            {[...Array(Math.floor(WIDTH / 40))].map((_, i) => (
-              <Rect key={i} x={i*40} y={0} width={1} height={HEIGHT} fill="#eee" />
+            {[...Array(Math.floor(width / 40))].map((_, i) => (
+              <Rect key={i} x={i*40} y={0} width={1} height={height} fill="#eee" />
             ))}
-            {[...Array(Math.floor(HEIGHT / 40))].map((_, i) => (
-              <Rect key={1000+i} x={0} y={i*40} width={WIDTH} height={1} fill="#eee" />
+            {[...Array(Math.floor(height / 40))].map((_, i) => (
+              <Rect key={1000+i} x={0} y={i*40} width={width} height={1} fill="#eee" />
             ))}
           </Layer>
         )}
